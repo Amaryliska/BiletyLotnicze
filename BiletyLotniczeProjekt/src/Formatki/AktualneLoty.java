@@ -98,7 +98,6 @@ public class AktualneLoty extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaAktualnychLotow = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
         wyszukajPrzycisk = new javax.swing.JButton();
         panelZamowien = new javax.swing.JPanel();
         wykonajPrzycisk = new javax.swing.JButton();
@@ -156,8 +155,6 @@ public class AktualneLoty extends javax.swing.JFrame {
             listaAktualnychLotow.getColumnModel().getColumn(4).setPreferredWidth(50);
             listaAktualnychLotow.getColumnModel().getColumn(5).setPreferredWidth(30);
         }
-
-        jLabel3.setText("Data lotu:");
 
         wyszukajPrzycisk.setText("Szukaj");
         wyszukajPrzycisk.addActionListener(new java.awt.event.ActionListener() {
@@ -225,7 +222,6 @@ public class AktualneLoty extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
@@ -251,9 +247,7 @@ public class AktualneLoty extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jLabel2)
-                .addGap(17, 17, 17)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
                     .addComponent(jCheckBox2)
@@ -310,6 +304,8 @@ public class AktualneLoty extends javax.swing.JFrame {
             listCheckBoxes.clear();
             panelZamowien.remove(rezerwacja);
             panelZamowien.remove(kupno);
+            panelZamowien.revalidate();
+            panelZamowien.repaint();
 
             if( listaLotow!= null )
             {
@@ -521,7 +517,6 @@ public class AktualneLoty extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;

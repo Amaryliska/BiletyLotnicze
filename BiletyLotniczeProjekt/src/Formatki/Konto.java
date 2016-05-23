@@ -165,7 +165,7 @@ public class Konto extends javax.swing.JFrame {
                             JLabel pustyString = new JLabel("-");
                             if( pierwszeAnuluj )
                             {
-                                panelAnulowania.add(pustyString, "wrap, gaptop 20");
+                                panelAnulowania.add(pustyString, "wrap, gaptop 15");
                                 pierwszeAnuluj = false;
                             }
                             else
@@ -297,7 +297,7 @@ public class Konto extends javax.swing.JFrame {
                             JLabel pustyString = new JLabel("-");
                             if( pierwszeAnuluj )
                             {
-                                panelAnulowania.add(pustyString, "wrap, gaptop 20");
+                                panelAnulowania.add(pustyString, "wrap, gaptop 15");
                                 pierwszeAnuluj = false;
                             }
                             else
