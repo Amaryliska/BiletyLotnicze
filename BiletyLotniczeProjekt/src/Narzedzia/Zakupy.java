@@ -27,6 +27,8 @@ public class Zakupy
     private final String USUN_REZERWACJE = "DELETE FROM REZERWACJE WHERE RZR_ID=?";
     private final String USUN_ZAKUP = "DELETE FROM ZAKUPY WHERE ZKP_ID=?";
     private final String USUN_PDF = "DELETE FROM POTWIERDZENIA_PDF WHERE PTW_ZKP_ID=?";
+    private final String POBIERZ_ID_REZERWACJI = "SELECT RZR_ID, RZR_UZT_ID FROM REZERWACJE WHERE RZR_LOT_ID=?";
+    private final String POBIERZ_ID_ZAKUPY = "SELECT ZKP_ID, ZKP_UZT_ID FROM ZAKUPY WHERE ZKP_LOT_ID=?";
 
     public final static String ZAKUP = "Zakup";
     public final static String REZERWACJA = "Rezerwacja";
@@ -346,5 +348,85 @@ public class Zakupy
             connection.close();
             ps.close();
         }
+    }
+    
+    private List<RezerwacjaBean> pobierzIDRezerwacji(Integer IDLot ) throws SQLException
+    {
+        connection = dbConnector.setConnection();
+        List<RezerwacjaBean> rezerwacjaID = new ArrayList<RezerwacjaBean>();
+        try
+        {
+            Object[] lista = null;
+            ps = connection.prepareStatement( POBIERZ_ID_REZERWACJI );
+            ps.setObject(1, IDLot);
+            rs = ps.executeQuery();
+            rezerwacjaID = narzedziaBazyDanych.zwrocRezerwacje(rs ); 
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+            rs.close();
+        }
+        return rezerwacjaID;
+    }
+    
+    public List<Object[]> pobierzIDRezerwacjiIDUzytkownika(Integer IDLot ) throws SQLException
+    {
+        List<RezerwacjaBean> rezerwacjaID = pobierzIDRezerwacji(IDLot);
+       
+        List<Object[]> rezerwacjaIDUzytkownikID = new ArrayList<Object[]>();
+        
+        for( RezerwacjaBean id : rezerwacjaID )
+        {
+            Object[] pobraneID = null;
+            pobraneID = new Object[]{id.getRezerwacjaID(), id.getRezerwacjaUzytkownikID() };
+            rezerwacjaIDUzytkownikID.add(pobraneID);
+        }
+        return rezerwacjaIDUzytkownikID;
+    }
+    
+    private List<ZakupBean> pobierzIDZakupy(Integer IDLot ) throws SQLException
+    {
+        connection = dbConnector.setConnection();
+        List<ZakupBean> zakupyID = new ArrayList<ZakupBean>();
+        try
+        {
+            Object[] lista = null;
+            ps = connection.prepareStatement( POBIERZ_ID_ZAKUPY );
+            ps.setObject(1, IDLot);
+            rs = ps.executeQuery();
+            zakupyID = narzedziaBazyDanych.zwrocZakupy(rs ); 
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+            rs.close();
+        }
+        return zakupyID;
+    }
+    
+    public List<Object[]> pobierzIDZakupyIDUzytkownika(Integer IDLot ) throws SQLException
+    {
+        List<ZakupBean> zakupyID = pobierzIDZakupy(IDLot);
+       
+        List<Object[]> zakupyIDUzytkownikID = new ArrayList<Object[]>();
+        
+        for( ZakupBean id : zakupyID )
+        {
+            Object[] pobraneID = null;
+            pobraneID = new Object[]{id.getZakupID(), id.getZakupUzytkownikID(), id.getZakupKwota()};
+            zakupyIDUzytkownikID.add(pobraneID);
+        }
+        return zakupyIDUzytkownikID;
     }
 }

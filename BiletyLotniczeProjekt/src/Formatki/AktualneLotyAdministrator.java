@@ -1,16 +1,30 @@
 package Formatki;
 
+import Beany.RezerwacjaBean;
 import Narzedzia.Loty;
+import Narzedzia.Powiadomienia;
+import Narzedzia.Zakupy;
+import java.awt.Button;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import net.miginfocom.swing.MigLayout;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,20 +39,33 @@ import javax.swing.table.DefaultTableModel;
 public class AktualneLotyAdministrator extends javax.swing.JFrame {
 
     Loty loty;
+    Zakupy zakupy;
+    Powiadomienia powiadomienia;
     List<Object[]> listaLotow;
+    List<Object[]> listaIdRezerwacji;
+    List<Object[]> listaIDZakupy;
     ButtonGroup modyfikacje;
     List<AbstractButton> listCheckBoxes;
+    JFrame parentFrame;
     /**
      * Creates new form AktualneLotyAdministrator
      */
     public AktualneLotyAdministrator() {
         initComponents();
         loty = new Loty();
+        zakupy = new Zakupy();
+        powiadomienia = new Powiadomienia();
         modyfikacje = new ButtonGroup();
         listCheckBoxes = new ArrayList<AbstractButton>();
+        parentFrame = (JFrame)SwingUtilities.getRoot(panelModyfikacji);
         pokazAktualneLoty();
     }
 
+    private void refresh() throws ParseException, Exception
+    {
+        new AktualneLotyAdministrator().setVisible(true);
+        parentFrame.dispose();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,13 +75,12 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaWszystkichLotow = new javax.swing.JTable();
-        jButton32 = new javax.swing.JButton();
-        jButton33 = new javax.swing.JButton();
         panelModyfikacji = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        buttonUsun = new javax.swing.JButton();
+        buttonEdytuj = new javax.swing.JButton();
+        buttonDodaj = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -66,48 +92,48 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(900, 600));
 
-        jButton3.setText("Dodaj");
-
         listaWszystkichLotow.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Miasto", "Lotnisko", "Linia Lotnicza", "Klasa", "Cena"
+                "Id", "Odlot / Przylot", "Linia Lotnicza", "Miasto", "Lotnisko", "Data odlotu", "Data przylotu", "Cena - klasa E", "Cena - klasa EP", "Cena - klasa B", "Cena - klasa P"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         listaWszystkichLotow.setRowHeight(30);
         jScrollPane2.setViewportView(listaWszystkichLotow);
-
-        jButton32.setLabel("Edytuj");
-
-        jButton33.setLabel("Usuń");
-
-        jLabel4.setText("Modyfikuj");
 
         javax.swing.GroupLayout panelModyfikacjiLayout = new javax.swing.GroupLayout(panelModyfikacji);
         panelModyfikacji.setLayout(panelModyfikacjiLayout);
         panelModyfikacjiLayout.setHorizontalGroup(
             panelModyfikacjiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelModyfikacjiLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 42, Short.MAX_VALUE)
         );
         panelModyfikacjiLayout.setVerticalGroup(
             panelModyfikacjiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelModyfikacjiLayout.createSequentialGroup()
-                .addComponent(jLabel4)
-                .addGap(0, 448, Short.MAX_VALUE))
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        buttonUsun.setLabel("Usuń");
+        buttonUsun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonUsunActionPerformed(evt);
+            }
+        });
+
+        buttonEdytuj.setLabel("Edytuj");
+        buttonEdytuj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEdytujActionPerformed(evt);
+            }
+        });
+
+        buttonDodaj.setText("Dodaj");
+        buttonDodaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDodajActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Szukaj");
         jMenuBar1.add(jMenu1);
@@ -130,64 +156,47 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton32, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(89, 89, 89))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(647, 647, 647)
-                    .addComponent(panelModyfikacji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(238, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonDodaj, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonEdytuj, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonUsun, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(241, 241, 241))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addComponent(panelModyfikacji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(186, 186, 186))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
-                .addComponent(jButton32)
-                .addGap(18, 18, 18)
-                .addComponent(jButton33)
-                .addGap(131, 131, 131))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(47, 47, 47)
-                    .addComponent(panelModyfikacji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(70, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelModyfikacji, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonUsun)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(buttonEdytuj)
+                        .addComponent(buttonDodaj)))
+                .addGap(109, 109, 109))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable listaWszystkichLotow;
-    private javax.swing.JPanel panelModyfikacji;
-    // End of variables declaration//GEN-END:variables
-
     private void pokazAktualneLoty() {
 
+        JLabel modyfikacja = new JLabel("Modyfikuj");
         try
         {   
             listaLotow = loty.pokazLotyAdmin();
@@ -206,11 +215,13 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
             }
             
             listCheckBoxes.clear();
+            panelModyfikacji.remove(modyfikacja);
             
             if( listaLotow!= null )
             {
-                panelModyfikacji.setLayout(new GridLayout(0, 1, 10, 10));
-                Object[] mojaNowaLista = new Object[listaLotow.size()];
+                panelModyfikacji.setLayout(new MigLayout("","","[]12[]"));
+                panelModyfikacji.add(modyfikacja,"wrap");
+
                 for( int i=0; i<listaLotow.size(); i++ )
                 { 
                     Object[] lot = listaLotow.get(i);
@@ -218,13 +229,12 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
                     JCheckBox modyfikuj = new JCheckBox();
                     modyfikuj.setName("modyfikuj"+i);
                     listCheckBoxes.add(modyfikuj);
-                    panelModyfikacji.add(modyfikuj);
+                    panelModyfikacji.add(modyfikuj, "wrap");
                     modyfikacje.add(modyfikuj);
                 }
-                //jLabel4.setVisible(true);
-                //jLabel5.setVisible(true);
                 panelModyfikacji.revalidate();
                 panelModyfikacji.repaint();
+                
             }
         }
         catch (SQLException ex)
@@ -232,4 +242,161 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
             Logger.getLogger(AktualneLoty.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     
+    private void buttonUsunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUsunActionPerformed
+        
+        int IDLot = 0;
+        String wybranaOpcja = null;
+        Enumeration enumsd = modyfikacje.getElements();
+        while( enumsd.hasMoreElements() )
+        {
+            JCheckBox jb = (JCheckBox)enumsd.nextElement();
+            if(jb.isSelected())
+            {
+                wybranaOpcja = jb.getName();
+                break;
+            }
+        }
+        if( wybranaOpcja == null )
+        {
+            JOptionPane.showMessageDialog(this, "Proszę wybrać lot.");
+        }
+        else
+        {
+            DefaultTableModel model = (DefaultTableModel) listaWszystkichLotow.getModel();
+            buttonDodaj.setVisible(false);
+            buttonEdytuj.setEnabled(false);
+            buttonUsun.setEnabled(false);
+            
+            panelModyfikacji.setEnabled(false);
+            Enumeration enumm =  modyfikacje.getElements();
+            while (enumm.hasMoreElements()) {
+                
+                JCheckBox nextElement =(JCheckBox)enumm.nextElement();
+                nextElement.setEnabled(false);
+            }
+            String wiersz = String.valueOf(wybranaOpcja.charAt(wybranaOpcja.length()-1));
+            Object[] wybranyLot = listaLotow.get(Integer.parseInt(wiersz));
+            
+            try 
+            {
+                IDLot = (int)wybranyLot[0];
+                listaIdRezerwacji = zakupy.pobierzIDRezerwacjiIDUzytkownika(IDLot);
+                if(listaIdRezerwacji != null)
+                {
+                   for(int i=0; i< listaIdRezerwacji.size(); i++)
+                   {
+                       Object[] listID = listaIdRezerwacji.get(i);
+                       powiadomienia.anulowanieLotuPrzezAdmina((int)listID[1], IDLot);
+                   }
+                }        
+                
+                listaIDZakupy = zakupy.pobierzIDZakupyIDUzytkownika(IDLot);
+                if(listaIDZakupy != null)
+                {
+                   for(int i=0; i< listaIDZakupy.size(); i++)
+                   {
+                       Object[] listID = listaIDZakupy.get(i);
+                       zakupy.usunZakup((int)listID[0], (int) listID[1], (float)listID[2]);
+                       powiadomienia.anulowanieLotuPrzezAdmina((int)listID[1], IDLot);
+                   }
+                }     
+                loty.usunLOT((int) wybranyLot[0]);
+                JOptionPane.showMessageDialog(panelModyfikacji, "Lot o id = " + wybranyLot[0] + " został usunięty.");
+                refresh();
+            } 
+            catch (SQLException ex) 
+            {
+                Logger.getLogger(AktualneLotyAdministrator.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(AktualneLotyAdministrator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_buttonUsunActionPerformed
+
+    private void buttonEdytujActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEdytujActionPerformed
+       
+        String wybranaOpcja = null;
+        Enumeration enumsd = modyfikacje.getElements();
+        while( enumsd.hasMoreElements() )
+        {
+            JCheckBox jb = (JCheckBox)enumsd.nextElement();
+            if(jb.isSelected())
+            {
+                wybranaOpcja = jb.getName();
+                break;
+            }
+        }
+        if( wybranaOpcja == null )
+        {
+            JOptionPane.showMessageDialog(this, "Proszę wybrać lot.");
+        }
+        else
+        {
+            //TODO
+        }
+    }//GEN-LAST:event_buttonEdytujActionPerformed
+
+    
+    
+    private void buttonDodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDodajActionPerformed
+
+        try {
+            new DodanieLotu().setVisible(true);
+            /*buttonDodaj.setVisible(false);
+            buttonEdytuj.setEnabled(false);
+            buttonUsun.setEnabled(false);
+            
+            listaWszystkichLotow.isEditing();
+            DefaultTableModel model = (DefaultTableModel) listaWszystkichLotow.getModel();
+            
+            
+            JComboBox comboBox = new JComboBox();
+            comboBox.addItem("Snowboarding");
+            comboBox.addItem("Rowing");
+            comboBox.addItem("Chasing toddlers");
+            comboBox.addItem("Speed reading");
+            comboBox.addItem("Teaching high school");
+            comboBox.addItem("None");
+            listaWszystkichLotow.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBox));
+            
+            JComboBox comboBox1 = new JComboBox();
+            comboBox1.addItem("Snowboarding");
+            comboBox1.addItem("Rowing");
+            comboBox1.addItem("Chasing toddlers");
+            comboBox1.addItem("Speed reading");
+            comboBox1.addItem("Teaching high school");
+            comboBox1.addItem("None");
+            listaWszystkichLotow.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox1));
+            
+            model.addRow(new Object[]{comboBox.getItemAt(0),"","","","0.0"});
+            int row = model.getRowCount();
+            
+            JCheckBox modyfikuj = new JCheckBox();
+            modyfikuj.setName("modyfikuj"+row);
+            listCheckBoxes.add(modyfikuj);
+            panelModyfikacji.add(modyfikuj, "wrap");
+            modyfikacje.add(modyfikuj);
+            */
+        } catch (SQLException ex) {
+            Logger.getLogger(AktualneLotyAdministrator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_buttonDodajActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonDodaj;
+    private javax.swing.JButton buttonEdytuj;
+    private javax.swing.JButton buttonUsun;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable listaWszystkichLotow;
+    private javax.swing.JPanel panelModyfikacji;
+    // End of variables declaration//GEN-END:variables
+
 }

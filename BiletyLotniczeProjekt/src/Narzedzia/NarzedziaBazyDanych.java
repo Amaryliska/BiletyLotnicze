@@ -192,4 +192,49 @@ public class NarzedziaBazyDanych
         }
         return listaUzytkownikowBean;
     }
+    
+    public List<RezerwacjaBean> zwrocRezerwacje( ResultSet rs )
+    {
+        List<RezerwacjaBean> listaRezerwacjiBean = new ArrayList<RezerwacjaBean>();
+        try
+        {
+            while( rs.next() )
+            {
+                RezerwacjaBean rezerwacjaBean = new RezerwacjaBean();
+                
+                rezerwacjaBean.setRezerwacjaID( rs.getInt( 1 ) );
+                rezerwacjaBean.setRezerwacjaUzytkownikID( rs.getInt( 2 ) );
+
+                listaRezerwacjiBean.add( rezerwacjaBean );
+            }
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        return listaRezerwacjiBean;
+    }
+    
+    public List<ZakupBean> zwrocZakupy( ResultSet rs )
+    {
+        List<ZakupBean> listaZakupyBean = new ArrayList<ZakupBean>();
+        try
+        {
+            while( rs.next() )
+            {
+                ZakupBean zakupyBean = new ZakupBean();
+                
+                zakupyBean.setZakupID(rs.getInt( 1 ) );
+                zakupyBean.setZakupUzytkownikID(rs.getInt( 2 ) );
+                zakupyBean.setZakupKwota(rs.getFloat( 3 ));
+
+                listaZakupyBean.add( zakupyBean );
+            }
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        return listaZakupyBean;
+    }
 }

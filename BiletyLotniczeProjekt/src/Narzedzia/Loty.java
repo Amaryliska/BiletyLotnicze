@@ -32,6 +32,15 @@ public class Loty
     private final String POBIERZ_DATE_LOTU = "SELECT LOT_DATA_ODLOTU FROM LOTY WHERE LOT_ID=?";
     private final String POBIERZ_DATE_LOTU_I_LOTNISKO = "SELECT LOT_DATA_ODLOTU, LTN_NAZWA FROM LOTY, LOTNISKO WHERE LOT_ID=? AND LTN_ID=LOT_LOTNISKO_ID";
     
+    private final String USUN_LOT = "DELETE FROM LOTY WHERE LOT_ID=?";
+    
+    private final String POBIERZ_NAZWY_LOTNISK = "SELECT LTN_NAZWA FROM LOTNISKO";
+    
+    private final String DODANIE_LOTU = "INSERT INTO loty (LOT_ODLOT_PRZYLOT, LOT_CENA_KLASA_EKONOMICZNA, LOT_CENA_KLASA_EKONOMICZNA_PREMIUM, LOT_CENA_KLASA_BIZNES, LOT_CENA_KLASA_PIERWSZA, LOT_DATA_ODLOTU, LOT_DATA_PRZYLOTU, LOT_LOTNISKO_ID, LOT_SAMOLOT_ID) VALUES (?,?,?,?,?,?,?,?,?)";
+    
+    private final String POBIERZ_ID_SAMOLOTY = "SELECT SML_ID FROM SAMOLOTY WHERE SML_LINIE_LOTNICZE=?";
+    private final String POBIERZ_ID_LOTNISKO = "SELECT LTN_ID FROM LOTNISKO WHERE LTN_NAZWA=?";
+    
     Connection connection = null;
     DBConnector dbConnector = null;
     PreparedStatement ps = null;
@@ -427,27 +436,10 @@ public class Loty
         for( LotBean lot : listaLotyBean )
         {
             Object[] akutalnyLot = null;
-            
-                if( lot.getLotCenaKlasyEkonomicznej() != 0 )
-                {
-                    akutalnyLot = new Object[]{lot.getLotLotniskoBean().getLotniskoMiasto(), lot.getLotLotniskoBean().getLotniskoNazwa(), lot.getLotSamolotBean().getLinieLotnicze(), SamolotBean.KLASA_EKONOMICZNA, lot.getLotCenaKlasyEkonomicznej()};
-                    wszystkieLoty.add(akutalnyLot);
-                }
-                if( lot.getLotCenaKlasyEkonomicznejPremium()!= 0 )
-                {
-                    akutalnyLot = new Object[]{lot.getLotLotniskoBean().getLotniskoMiasto(), lot.getLotLotniskoBean().getLotniskoNazwa(), lot.getLotSamolotBean().getLinieLotnicze(), SamolotBean.KLASA_EKONOMICZNA_PREMIUM, lot.getLotCenaKlasyEkonomicznejPremium()};
-                    wszystkieLoty.add(akutalnyLot);
-                }
-                if( lot.getLotCenaKlasyBiznes()!= 0 )
-                {
-                    akutalnyLot = new Object[]{lot.getLotLotniskoBean().getLotniskoMiasto(), lot.getLotLotniskoBean().getLotniskoNazwa(), lot.getLotSamolotBean().getLinieLotnicze(), SamolotBean.KLASA_BIZNES, lot.getLotCenaKlasyBiznes()};
-                    wszystkieLoty.add(akutalnyLot);
-                }
-                if( lot.getLotCenaKlasyPierwszej()!= 0 )
-                {
-                    akutalnyLot = new Object[]{lot.getLotLotniskoBean().getLotniskoMiasto(), lot.getLotLotniskoBean().getLotniskoNazwa(), lot.getLotSamolotBean().getLinieLotnicze(), SamolotBean.KLASA_PIERWSZA, lot.getLotCenaKlasyPierwszej()};
-                    wszystkieLoty.add(akutalnyLot);
-                }
+           
+            akutalnyLot = new Object[]{lot.getLotID(), lot.getLotOdlotPrzylot(),lot.getLotSamolotBean().getLinieLotnicze(), lot.getLotLotniskoBean().getLotniskoMiasto(), lot.getLotLotniskoBean().getLotniskoNazwa(), lot.getLotDataOdlotu(), lot.getLotDataPrzylotu(), lot.getLotCenaKlasyEkonomicznej(), lot.getLotCenaKlasyEkonomicznejPremium(), lot.getLotCenaKlasyBiznes(), lot.getLotCenaKlasyPierwszej()};
+            wszystkieLoty.add(akutalnyLot);
+               
             }
         return wszystkieLoty;
     }
@@ -478,5 +470,151 @@ public class Loty
             rs.close();
         }
         return lista;
+    }
+    
+    public void usunLOT( Integer IDLot) throws SQLException
+    {
+        connection = dbConnector.setConnection();
+        try
+        {
+            ps = connection.prepareStatement( USUN_LOT );
+            ps.setObject(1, IDLot);
+            ps.executeUpdate();
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+        }
+    }
+    
+    public List<Object[]> pobierzLinieLotniczeIDostepneKlasy() throws SQLException
+    {
+        List<SamolotBean> listaSamolotBean = pobierzSamoloty();
+        
+        List<Object[]> linieLotnicze = new ArrayList<Object[]>();
+        
+        for( SamolotBean samolot : listaSamolotBean )
+        {
+            Object[] aktualnySamolot = null;
+                  
+            aktualnySamolot = new Object[]{ samolot.getLinieLotnicze(), samolot.isKlasaEkonomiczna(), samolot.isKlasaEkonomicznaPremium(), samolot.isKlasaBiznes(), samolot.isKlasaPierwsza()};
+            linieLotnicze.add(aktualnySamolot);
+        }
+        return linieLotnicze;
+    }
+    
+    public List<String> pobierzNazwyLotnisk() throws SQLException
+    {
+        connection = dbConnector.setConnection();
+        List<String> lista = new ArrayList<String>();
+        try
+        {
+            ps = connection.prepareStatement( POBIERZ_NAZWY_LOTNISK );
+            rs = ps.executeQuery();
+            while(rs.next())
+            {
+                lista.add(rs.getString(1));
+            }  
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+            rs.close();
+        }
+        return lista;
+    }
+    
+    public int dodajNowyLot(String odlotPrzylot, float cenaKlasaE, float cenaKlasaEP, float cenaKlasaB, float cenaKlasaP, String dataOdlotu, String dataPrzylotu, int IDLotnisko, int IDSamolot) throws SQLException
+    {
+        int isInserted = 0;
+        try
+        {
+            connection = dbConnector.setConnection();  
+            ps = connection.prepareStatement( DODANIE_LOTU );
+            ps.setObject(1, odlotPrzylot);
+            ps.setObject(2, cenaKlasaE);
+            ps.setObject(3, cenaKlasaEP);
+            ps.setObject(4, cenaKlasaB);
+            ps.setObject(5, cenaKlasaP);
+            ps.setObject(6, dataOdlotu);
+            ps.setObject(7, dataPrzylotu);
+            ps.setObject(8, IDLotnisko);
+            ps.setObject(9, IDSamolot);       
+            isInserted = ps.executeUpdate();
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+        }
+        return isInserted;
+    }
+    
+    public int pobierzIDSamoloty( String nazwaLiniLotniczych) throws SQLException
+    {
+        connection = dbConnector.setConnection();
+        int IDSamolot = 0;
+        try
+        {
+            ps = connection.prepareStatement( POBIERZ_ID_SAMOLOTY );
+            ps.setObject(1, nazwaLiniLotniczych);
+            rs = ps.executeQuery();
+            while(rs.next())
+            {
+                IDSamolot = rs.getInt(1);
+            }  
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+            rs.close();
+        }
+        return IDSamolot;
+    }
+    
+    public int pobierzIDLotnisko( String nazwaLotniska) throws SQLException
+    {
+        connection = dbConnector.setConnection();
+        int IDSamolot = 0;
+        try
+        {
+            ps = connection.prepareStatement( POBIERZ_ID_LOTNISKO );
+            ps.setObject(1, nazwaLotniska);
+            rs = ps.executeQuery();
+            while(rs.next())
+            {
+                IDSamolot = rs.getInt(1);
+            }  
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+            rs.close();
+        }
+        return IDSamolot;
     }
 }

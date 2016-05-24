@@ -118,4 +118,32 @@ public class Powiadomienia
             ps.close();
         }
     }
+    
+    public void anulowanieLotuPrzezAdmina(Integer IDUzytkownika , Integer IDLot) throws SQLException
+    {
+        String temat = WiadomoscBean.TEMAT_ANULOWANIE_ADMIN;
+        String tresc = WiadomoscBean.TRESC_ANULOWANIE_ADMIN;
+        tresc = tresc.replaceFirst("\\?", String.valueOf(IDLot));
+        try
+        {
+            connection = dbConnector.setConnection();
+            ps = connection.prepareStatement( POWIADOMIENIE );
+            ps.setObject(1, IDUzytkownika);
+            ps.setObject(2, 1); //TODO zmienic na aktualnie zalogowanego admina - id
+            ps.setObject(3, temat);
+            ps.setObject(4, tresc);
+            ps.setObject(5, WiadomoscBean.WIADOMOSC_TYP_0);
+            
+            ps.executeUpdate();
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+        }
+    }
 }
