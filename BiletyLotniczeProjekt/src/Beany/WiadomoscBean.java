@@ -34,9 +34,11 @@ public class WiadomoscBean
     public static final String TRESC_ANULOWANIE = "anulowania lotu ID ?";
     public static final String TRESC_PDF = "Wygenerowano nowe potwierdzenie PDF dla uzytkownika ID ?.";
     
-    public static final String TEMAT_ANULOWANIE_ADMIN = "Anulowanie lotu przez administratora";
+    public static final String TEMAT_ANULOWANIE_ADMIN = "Anulowanie lotu przez administratora.";
+    public static final String TEMAT_EDYCJA_ADMIN = "Edycja lotu przez administratora.";
     
-    public static final String TRESC_ANULOWANIE_ADMIN = "anulowanie lotu ID ?";
+    public static final String TRESC_ANULOWANIE_ADMIN = "Anulowanie lotu ID ?";
+    public static final String TRESC_EDYCJA_ADMIN = "Edytowanie lotu ID ?";
     
     Integer wiadomoscID;
     Integer wiadomoscIDOdbiorcy;

@@ -1,17 +1,21 @@
 package Formatki;
 
 import Narzedzia.Loty;
+import Narzedzia.Powiadomienia;
+import Narzedzia.Zakupy;
 import com.mysql.fabric.xmlrpc.base.Data;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,24 +27,31 @@ import javax.swing.JOptionPane;
  *
  * @author Beata
  */
-public class DodanieLotu extends javax.swing.JFrame {
+public class EdycjaLotu extends javax.swing.JFrame {
 
     Loty loty;
+    Zakupy zakupy;
     ButtonGroup przylotOdlot;
     List<Object[]> listaLiniLotniczych;
     List<String> listaLotnisk;
+    List<Object[]> listaIdRezerwacji;
+    List<Object[]> listaIDZakupy;
+    int id = 0;
     JFrame parentFrame;
+    Powiadomienia powiadomienia;
     /**
      * Creates new form DodanieLotu
      */
-    public DodanieLotu(JFrame parentF) throws SQLException {
+    public EdycjaLotu(Object[] selectedRow, JFrame parentF) throws SQLException {
         initComponents();
         przylotOdlot = new ButtonGroup();     
         loty = new Loty();
+        zakupy = new Zakupy();
+        powiadomienia = new Powiadomienia();
         przylotOdlot.add(jRadioButtonPrzylot);
         przylotOdlot.add(jRadioButtonOdlot);
         parentFrame = parentF;
-        zaladujDane();
+        zaladujDane(selectedRow);
     }
     
     private void refresh() throws ParseException, Exception
@@ -50,38 +61,80 @@ public class DodanieLotu extends javax.swing.JFrame {
     }
 
     
-    public void zaladujDane() throws SQLException
+    public void zaladujDane(Object[] selectedRow) throws SQLException
     {
+        id = (int)selectedRow[0];
+        String odlotPrzylot = (String)selectedRow[1];
+        String nazwaLiniLotniczych = (String)selectedRow[2];
+        String nazwaLotniska = (String)selectedRow[4];
+        String dataOdlotu = (String)selectedRow[5];
+        String dataPrzylotu = (String)selectedRow[6];
+        String cenaE = selectedRow[7].toString();
+        String cenaEP = selectedRow[8].toString();
+        String cenaB = selectedRow[9].toString();
+        String cenaP = selectedRow[10].toString();
+        
+        if(odlotPrzylot.equals("P"))
+        {
+            jRadioButtonPrzylot.setSelected(true);
+        }
+        else if(odlotPrzylot.equals("O"))
+        {
+            jRadioButtonOdlot.setSelected(true);
+        }
+        
+        jTextDataOdlotu.setText(dataOdlotu);
+        jTextDataPrzylotu.setText(dataPrzylotu);
+        
         //ustawienie Lini lotniczych
+        jComboBoxLiniaLotnicza.addItem(nazwaLiniLotniczych);
         listaLiniLotniczych = loty.pobierzLinieLotniczeIDostepneKlasy();
         if( listaLiniLotniczych!= null )
         {
             for( int i=0; i<listaLiniLotniczych.size(); i++ )
                 { 
                     Object[] linia = listaLiniLotniczych.get(i);
-                    jComboBoxLiniaLotnicza.addItem((String)linia[0]);
-                    
-                    if(i==0)
+                    if(!linia[0].equals(nazwaLiniLotniczych))
+                    {
+                        jComboBoxLiniaLotnicza.addItem((String)linia[0]);
+                    }
+                    else
                     {
                         //czy jest klasa ekonomiczna
                         if(!(boolean)linia[1])
                         {
                             jTextFieldE.setEnabled(false);
                         }
+                        else
+                        {
+                             jTextFieldE.setText(cenaE);
+                        }
                         //czy jest klasa ekonomiczna premium
                         if(!(boolean)linia[2])
                         {
                             jTextFieldEP.setEnabled(false);
+                        }
+                        else
+                        {
+                             jTextFieldEP.setText(cenaEP);
                         }
                         //czy jest klasa biznes
                         if(!(boolean)linia[3])
                         {
                             jTextFieldB.setEnabled(false);
                         }
+                        else
+                        {
+                            jTextFieldB.setText(cenaB);
+                        }
                         //czy jest klasa pierwsza
                         if(!(boolean)linia[4])
                         {
                             jTextFieldP.setEnabled(false);
+                        }
+                        else
+                        {
+                            jTextFieldP.setText(cenaP);
                         }
                     }
                 }
@@ -99,7 +152,7 @@ public class DodanieLotu extends javax.swing.JFrame {
                     for( int i=0; i<listaLiniLotniczych.size(); i++ )
                     { 
                         Object[] linia = listaLiniLotniczych.get(i);
-                        if(linia[0] == item)
+                        if(linia[0].equals(item))
                         {
                             selectedItem = i;
                             break;    
@@ -116,7 +169,7 @@ public class DodanieLotu extends javax.swing.JFrame {
                         jTextFieldE.setEnabled(true);
                     }
                     //czy jest klasa ekonomiczna premium
-                    if(!(boolean)linia[2] )
+                    if(!(boolean)linia[2])
                     {
                         jTextFieldEP.setEnabled(false);
                     }
@@ -149,12 +202,16 @@ public class DodanieLotu extends javax.swing.JFrame {
         
        //zaladowanie miast i nazw lotnisk
        listaLotnisk = loty.pobierzNazwyLotnisk();
-       if( listaLotnisk != null )
+       jComboBoxNazwaLotniska.addItem(nazwaLotniska);
+       if( listaLotnisk!= null )
        {
            for(int i=0; i< listaLotnisk.size(); i++)
            {
-                String nazwaLotniska = listaLotnisk.get(i);
-                jComboBoxNazwaLotniska.addItem(nazwaLotniska);
+                String nazwa = listaLotnisk.get(i);
+                if(!nazwa.equals(nazwaLotniska))
+                {
+                    jComboBoxNazwaLotniska.addItem(nazwa);
+                }
            }
        }
     }
@@ -183,7 +240,7 @@ public class DodanieLotu extends javax.swing.JFrame {
         jTextFieldEP = new javax.swing.JTextField();
         jTextFieldB = new javax.swing.JTextField();
         jTextFieldP = new javax.swing.JTextField();
-        buttonZapisz = new javax.swing.JButton();
+        buttonZapiszZmiany = new javax.swing.JButton();
         buttonAnuluj = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jRadioButtonPrzylot = new javax.swing.JRadioButton();
@@ -267,10 +324,10 @@ public class DodanieLotu extends javax.swing.JFrame {
                 .addGap(0, 67, Short.MAX_VALUE))
         );
 
-        buttonZapisz.setLabel("Zapisz");
-        buttonZapisz.addActionListener(new java.awt.event.ActionListener() {
+        buttonZapiszZmiany.setText("Zapisz zmiany");
+        buttonZapiszZmiany.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonZapiszActionPerformed(evt);
+                buttonZapiszZmianyActionPerformed(evt);
             }
         });
 
@@ -321,7 +378,7 @@ public class DodanieLotu extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(buttonAnuluj)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(buttonZapisz))
+                        .addComponent(buttonZapiszZmiany))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -371,13 +428,10 @@ public class DodanieLotu extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonZapisz)
+                    .addComponent(buttonZapiszZmiany)
                     .addComponent(buttonAnuluj))
                 .addContainerGap(86, Short.MAX_VALUE))
         );
-
-        jLabel4.getAccessibleContext().setAccessibleName("Linia lotnicza:");
-        buttonZapisz.getAccessibleContext().setAccessibleName("Zapisz");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -403,7 +457,7 @@ public class DodanieLotu extends javax.swing.JFrame {
        this.setVisible(false);
     }//GEN-LAST:event_buttonAnulujActionPerformed
 
-    private void buttonZapiszActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonZapiszActionPerformed
+    private void buttonZapiszZmianyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonZapiszZmianyActionPerformed
         
         String setPrzylotOdlot = "";
         String nazwaLiniLotniczych = "";
@@ -456,27 +510,47 @@ public class DodanieLotu extends javax.swing.JFrame {
                 klasaP = Float.parseFloat(jTextFieldP.getText());
             }
             
-            isInserted = loty.dodajNowyLot(setPrzylotOdlot, klasaE, klasaEP, klasaB, klasaP, dataOdlotu, dataPrzylotu, IDLotnisko, IDSamolot);
+            isInserted = loty.edytujLot(setPrzylotOdlot, klasaE, klasaEP, klasaB, klasaP, dataOdlotu, dataPrzylotu, IDLotnisko, IDSamolot,id);
             if(isInserted == 1)
             {
+                listaIdRezerwacji = zakupy.pobierzIDRezerwacjiIDUzytkownika(id);
+                if(listaIdRezerwacji != null)
+                {
+                   for(int i=0; i< listaIdRezerwacji.size(); i++)
+                   {
+                       Object[] listID = listaIdRezerwacji.get(i);
+                       powiadomienia.edycjaLotuPrzezAdmina((int)listID[1], id);
+                   }
+                }        
+                
+                listaIDZakupy = zakupy.pobierzIDZakupyIDUzytkownika(id);
+                if(listaIDZakupy != null)
+                {
+                   for(int i=0; i< listaIDZakupy.size(); i++)
+                   {
+                       Object[] listID = listaIDZakupy.get(i);
+                       powiadomienia.edycjaLotuPrzezAdmina((int)listID[1], id);
+                   }
+                }     
+
                 this.setVisible(false);
                 refresh();
             }
             else
             {
                 JOptionPane.showMessageDialog(this, "Nie powiodło się dodanie nowego lotu");
-                this.setVisible(false);
+                 this.setVisible(false);
             }
             
         } catch (Exception ex) {
-            Logger.getLogger(DodanieLotu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EdycjaLotu.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_buttonZapiszActionPerformed
+    }//GEN-LAST:event_buttonZapiszZmianyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAnuluj;
-    private javax.swing.JButton buttonZapisz;
+    private javax.swing.JButton buttonZapiszZmiany;
     private javax.swing.JComboBox<String> jComboBoxLiniaLotnicza;
     private javax.swing.JComboBox<String> jComboBoxNazwaLotniska;
     private javax.swing.JLabel jLabel10;

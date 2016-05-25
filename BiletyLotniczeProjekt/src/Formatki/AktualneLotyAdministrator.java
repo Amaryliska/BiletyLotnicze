@@ -7,6 +7,7 @@ import Narzedzia.Zakupy;
 import java.awt.Button;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
     ButtonGroup modyfikacje;
     List<AbstractButton> listCheckBoxes;
     JFrame parentFrame;
+    private DodanieLotu frameDodanieLotu = null;
+    private EdycjaLotu frameEdycjaLotu = null;
     /**
      * Creates new form AktualneLotyAdministrator
      */
@@ -333,51 +336,36 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
         }
         else
         {
-            //TODO
+            String selectedRow = String.valueOf(wybranaOpcja.charAt(wybranaOpcja.length()-1));
+            Object[] selectedRowValues = listaLotow.get(Integer.parseInt(selectedRow));
+           
+            try 
+            {
+                if(frameEdycjaLotu == null)
+                {
+                    frameEdycjaLotu = new EdycjaLotu(selectedRowValues, parentFrame);
+                }
+                if(!frameEdycjaLotu.isVisible())
+                {
+                    frameEdycjaLotu.setVisible(true);
+                }
+            } catch (SQLException ex) 
+            {
+                Logger.getLogger(AktualneLotyAdministrator.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_buttonEdytujActionPerformed
 
     
-    
     private void buttonDodajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDodajActionPerformed
 
         try {
-            new DodanieLotu().setVisible(true);
-            /*buttonDodaj.setVisible(false);
-            buttonEdytuj.setEnabled(false);
-            buttonUsun.setEnabled(false);
-            
-            listaWszystkichLotow.isEditing();
-            DefaultTableModel model = (DefaultTableModel) listaWszystkichLotow.getModel();
-            
-            
-            JComboBox comboBox = new JComboBox();
-            comboBox.addItem("Snowboarding");
-            comboBox.addItem("Rowing");
-            comboBox.addItem("Chasing toddlers");
-            comboBox.addItem("Speed reading");
-            comboBox.addItem("Teaching high school");
-            comboBox.addItem("None");
-            listaWszystkichLotow.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBox));
-            
-            JComboBox comboBox1 = new JComboBox();
-            comboBox1.addItem("Snowboarding");
-            comboBox1.addItem("Rowing");
-            comboBox1.addItem("Chasing toddlers");
-            comboBox1.addItem("Speed reading");
-            comboBox1.addItem("Teaching high school");
-            comboBox1.addItem("None");
-            listaWszystkichLotow.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox1));
-            
-            model.addRow(new Object[]{comboBox.getItemAt(0),"","","","0.0"});
-            int row = model.getRowCount();
-            
-            JCheckBox modyfikuj = new JCheckBox();
-            modyfikuj.setName("modyfikuj"+row);
-            listCheckBoxes.add(modyfikuj);
-            panelModyfikacji.add(modyfikuj, "wrap");
-            modyfikacje.add(modyfikuj);
-            */
+            if( frameDodanieLotu == null)
+            {
+                 frameDodanieLotu = new DodanieLotu(parentFrame);
+            }  
+            if (!frameDodanieLotu.isVisible())
+                frameDodanieLotu.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(AktualneLotyAdministrator.class.getName()).log(Level.SEVERE, null, ex);
         }

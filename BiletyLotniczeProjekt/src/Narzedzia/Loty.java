@@ -41,6 +41,8 @@ public class Loty
     private final String POBIERZ_ID_SAMOLOTY = "SELECT SML_ID FROM SAMOLOTY WHERE SML_LINIE_LOTNICZE=?";
     private final String POBIERZ_ID_LOTNISKO = "SELECT LTN_ID FROM LOTNISKO WHERE LTN_NAZWA=?";
     
+    private final String EDYCJA_LOTU = "UPDATE loty SET LOT_ODLOT_PRZYLOT=?, LOT_CENA_KLASA_EKONOMICZNA=?, LOT_CENA_KLASA_EKONOMICZNA_PREMIUM=?, LOT_CENA_KLASA_BIZNES=?, LOT_CENA_KLASA_PIERWSZA=?, LOT_DATA_ODLOTU=?, LOT_DATA_PRZYLOTU=?, LOT_LOTNISKO_ID=?, LOT_SAMOLOT_ID=? WHERE LOT_ID=?";
+    
     Connection connection = null;
     DBConnector dbConnector = null;
     PreparedStatement ps = null;
@@ -616,5 +618,36 @@ public class Loty
             rs.close();
         }
         return IDSamolot;
+    }
+    
+    public int edytujLot(String odlotPrzylot, float cenaKlasaE, float cenaKlasaEP, float cenaKlasaB, float cenaKlasaP, String dataOdlotu, String dataPrzylotu, int IDLotnisko, int IDSamolot, Integer IDLot) throws SQLException
+    {
+        int isInserted = 0;
+        connection = dbConnector.setConnection();
+        try
+        {
+            ps = connection.prepareStatement( EDYCJA_LOTU );
+            ps.setObject(1, odlotPrzylot);
+            ps.setObject(2, cenaKlasaE);
+            ps.setObject(3, cenaKlasaEP);
+            ps.setObject(4, cenaKlasaB);
+            ps.setObject(5, cenaKlasaP);
+            ps.setObject(6, dataOdlotu);
+            ps.setObject(7, dataPrzylotu);
+            ps.setObject(8, IDLotnisko);
+            ps.setObject(9, IDSamolot);  
+            ps.setObject(10, IDLot);
+            isInserted = ps.executeUpdate();
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            connection.close();
+            ps.close();
+        }
+        return isInserted;
     }
 }
