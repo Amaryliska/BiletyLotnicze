@@ -1,15 +1,10 @@
 package Formatki;
 
-import Beany.RezerwacjaBean;
 import Beany.UzytkownikBean;
 import Narzedzia.Loty;
 import Narzedzia.Powiadomienia;
 import Narzedzia.Zakupy;
 import Wzorce.SingletonUzytkownik;
-import java.awt.Button;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -19,9 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

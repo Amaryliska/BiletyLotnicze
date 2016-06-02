@@ -433,18 +433,17 @@ public class AktualneLoty extends javax.swing.JFrame {
                         String wybraneMiejsce = rzedyComboBox.getSelectedItem() + "|" + miejscaComboBox.getSelectedItem();
                         try 
                         {
-                            // TODO : zmienić ID uzytkownika za globalna zmienna, ustawiana przy lgoowaniu
-                            int isInserted = zakupy.rezerwujLubKupLot( wybranaOpcja2, 1, String.valueOf(wybranyLot[0]), wybraneMiejsce, String.valueOf(wybranyLot[4]), String.valueOf(wybranyLot[5]) );
+                            int isInserted = zakupy.rezerwujLubKupLot( wybranaOpcja2, SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID(), String.valueOf(wybranyLot[0]), wybraneMiejsce, String.valueOf(wybranyLot[4]), String.valueOf(wybranyLot[5]) );
                             if( isInserted == 1 )
                             {
                                 JOptionPane.showMessageDialog(panelZamowien, "Zlecenie zrealizowane.");
-                                powiadomienia.potwierdzenieRezerwacjiKupna( wybranaOpcja2, String.valueOf(1) );
+                                powiadomienia.potwierdzenieRezerwacjiKupna( wybranaOpcja2, String.valueOf(SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID()) );
                                 if( wybranaOpcja2.contains("kup") )
                                 {
                                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                                     Date date = new Date();
                                     pdf.stworzPDF(String.valueOf(zakupy.last_inserted_id), String.valueOf(wybranyLot[6]), String.valueOf(wybranyLot[1]), String.valueOf(wybranyLot[5]), wybraneMiejsce, String.valueOf(dateFormat.format(date)));
-                                    powiadomienia.wygenerowanieNowegoPotwierdzeniaPDF( 1 );
+                                    powiadomienia.wygenerowanieNowegoPotwierdzeniaPDF( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID() );
                                 }
                                 refresh();
                             }

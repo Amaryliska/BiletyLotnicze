@@ -1,7 +1,6 @@
 package Formatki;
 
 import Narzedzia.Loty;
-import com.mysql.fabric.xmlrpc.base.Data;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;

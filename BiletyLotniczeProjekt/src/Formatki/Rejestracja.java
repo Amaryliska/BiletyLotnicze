@@ -130,8 +130,6 @@ public class Rejestracja extends javax.swing.JFrame {
             }
         });
 
-        hasloPF.setText("jPasswordField1");
-
         kobietaRB.setFont(new java.awt.Font("Calibri", 2, 12)); // NOI18N
         kobietaRB.setText("Kobieta");
         kobietaRB.addActionListener(new java.awt.event.ActionListener() {
@@ -328,8 +326,6 @@ public class Rejestracja extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Calibri", 2, 12)); // NOI18N
         jLabel13.setText("Powtórz hasło:");
-
-        powtorzHasloPF.setText("jPasswordField2");
 
         logowanieB.setText("Powrót do logowania");
         logowanieB.addActionListener(new java.awt.event.ActionListener() {

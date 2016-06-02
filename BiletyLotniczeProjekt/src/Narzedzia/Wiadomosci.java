@@ -5,12 +5,7 @@
  */
 package Narzedzia;
 
-import Beany.AdresBean;
-import Beany.KontaktBean;
-import Beany.UzytkownikBean;
-import Beany.DokumentBean;
 import Beany.WiadomoscBean;
-import Wzorce.SingletonUzytkownik;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

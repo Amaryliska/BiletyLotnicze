@@ -64,20 +64,20 @@ public class Konto extends javax.swing.JFrame {
         pdf = new PDF();
         try 
         {
-            dostepneSrodki = zakupy.pobierzDostepneSrodki(1);
+            dostepneSrodki = zakupy.pobierzDostepneSrodki(SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID());
         } 
         catch (SQLException ex) 
         {
             Logger.getLogger(Konto.class.getName()).log(Level.SEVERE, null, ex);
         }
         srodkiLabel.setText(String.valueOf(dostepneSrodki));
-        listaZakupow = zakupy.pokazZakupy(1);
+        listaZakupow = zakupy.pokazZakupy(SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID());
         if( listaZakupow != null )
         {
             ustawZakupy(listaZakupow);
         }
-        listaRezerwacji = zakupy.pobierzRezerwacje( 1 );
-        listaZakupy = zakupy.pobierzZakupy( 1 );
+        listaRezerwacji = zakupy.pobierzRezerwacje( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID() );
+        listaZakupy = zakupy.pobierzZakupy( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID() );
         powiadomienia = new Powiadomienia();
         parentFrame = (JFrame)SwingUtilities.getRoot(jPanel1);
     }
@@ -138,7 +138,7 @@ public class Konto extends javax.swing.JFrame {
                                         try 
                                         {
                                             zakupy.usunRezerwacje(rb.getRezerwacjaID());
-                                            powiadomienia.anulowanieLotuPrzezUzytkownika( rb.getRezerwacjaLotID(), 1 );
+                                            powiadomienia.anulowanieLotuPrzezUzytkownika( rb.getRezerwacjaLotID(), SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID() );
                                             refresh();
                                         } 
                                         catch (SQLException ex) 
@@ -195,7 +195,7 @@ public class Konto extends javax.swing.JFrame {
                                     RezerwacjaBean rb = listaRezerwacji.get(intIndeks);
                                     try 
                                     {
-                                        int zakup = zakupy.rezerwujLubKupLot(Zakupy.ZAKUP, 1, String.valueOf(rb.getRezerwacjaLotID()), rb.getRezerwacjaRzadMiejsce(), rb.getRezerwacjaKlasa(), String.valueOf(rb.getRezerwacjaKwota()));
+                                        int zakup = zakupy.rezerwujLubKupLot(Zakupy.ZAKUP, SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID(), String.valueOf(rb.getRezerwacjaLotID()), rb.getRezerwacjaRzadMiejsce(), rb.getRezerwacjaKlasa(), String.valueOf(rb.getRezerwacjaKwota()));
                                         if( zakup == 1 )
                                         {
                                             JOptionPane.showMessageDialog(null, "Zakupiono pomyślnie.");
@@ -204,7 +204,7 @@ public class Konto extends javax.swing.JFrame {
                                             Date date = new Date();
                                             List<String> lista = loty.pobierzDateLotuILotnisko(rb.getRezerwacjaLotID());
                                             pdf.stworzPDF(String.valueOf(zakupy.last_inserted_id), lista.get(0), lista.get(1), String.valueOf(rb.getRezerwacjaKwota()), rb.getRezerwacjaRzadMiejsce(), String.valueOf(dateFormat.format(date)));
-                                            powiadomienia.wygenerowanieNowegoPotwierdzeniaPDF( 1 );
+                                            powiadomienia.wygenerowanieNowegoPotwierdzeniaPDF( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID() );
                                             refresh();
                                         }
                                     } 
@@ -271,7 +271,7 @@ public class Konto extends javax.swing.JFrame {
                                         try 
                                         {
                                             zakupy.usunZakup(zb.getZakupID(), zb.getZakupUzytkownikID(), zb.getZakupKwota());
-                                            powiadomienia.anulowanieLotuPrzezUzytkownika( zb.getZakupLotID(), 1 );
+                                            powiadomienia.anulowanieLotuPrzezUzytkownika( zb.getZakupLotID(), SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID() );
                                             refresh();
                                         } 
                                         catch (SQLException ex) 

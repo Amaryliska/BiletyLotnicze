@@ -2,6 +2,7 @@
 package Narzedzia;
 
 import Beany.WiadomoscBean;
+import Wzorce.SingletonUzytkownik;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -129,7 +130,7 @@ public class Powiadomienia
             connection = dbConnector.setConnection();
             ps = connection.prepareStatement( POWIADOMIENIE );
             ps.setObject(1, IDUzytkownika);
-            ps.setObject(2, 1); //TODO zmienic na aktualnie zalogowanego admina - id
+            ps.setObject(2, SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID());
             ps.setObject(3, temat);
             ps.setObject(4, tresc);
             ps.setObject(5, WiadomoscBean.WIADOMOSC_TYP_0);
@@ -157,7 +158,7 @@ public class Powiadomienia
             connection = dbConnector.setConnection();
             ps = connection.prepareStatement( POWIADOMIENIE );
             ps.setObject(1, IDUzytkownika);
-            ps.setObject(2, 1); //TODO zmienic na aktualnie zalogowanego admina - id
+            ps.setObject(2, SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().getUzytkownikID());
             ps.setObject(3, temat);
             ps.setObject(4, tresc);
             ps.setObject(5, WiadomoscBean.WIADOMOSC_TYP_0);

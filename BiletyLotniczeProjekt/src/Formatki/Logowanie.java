@@ -94,13 +94,6 @@ public class Logowanie extends javax.swing.JFrame {
             }
         });
 
-        hasloPF.setText("jPasswordField1");
-        hasloPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                hasloPFActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -193,10 +186,6 @@ public class Logowanie extends javax.swing.JFrame {
         // TODO add your handling code here:
         logowanie.dispose();
     }//GEN-LAST:event_wyjścieBActionPerformed
-
-    private void hasloPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hasloPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_hasloPFActionPerformed
 
     /**
      * @param args the command line arguments
