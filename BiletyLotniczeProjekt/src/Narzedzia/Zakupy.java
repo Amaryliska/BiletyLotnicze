@@ -28,7 +28,7 @@ public class Zakupy
     private final String USUN_ZAKUP = "DELETE FROM ZAKUPY WHERE ZKP_ID=?";
     private final String USUN_PDF = "DELETE FROM POTWIERDZENIA_PDF WHERE PTW_ZKP_ID=?";
     private final String POBIERZ_ID_REZERWACJI = "SELECT RZR_ID, RZR_UZT_ID FROM REZERWACJE WHERE RZR_LOT_ID=?";
-    private final String POBIERZ_ID_ZAKUPY = "SELECT ZKP_ID, ZKP_UZT_ID FROM ZAKUPY WHERE ZKP_LOT_ID=?";
+    private final String POBIERZ_ID_ZAKUPY = "SELECT ZKP_ID, ZKP_UZT_ID, ZKP_KWOTA FROM ZAKUPY WHERE ZKP_LOT_ID=?";
 
     public final static String ZAKUP = "Zakup";
     public final static String REZERWACJA = "Rezerwacja";
