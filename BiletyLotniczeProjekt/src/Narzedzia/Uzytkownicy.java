@@ -266,7 +266,7 @@ public class Uzytkownicy {
 
         for( UzytkownikBean user : listaUzytkownikowBean )
         {
-            if((user.getUzytkownikLogin().equals(login) ) && (user.getUzytkownikAdresEmail().equals(adresEmail) ) ) {
+            if((user.getUzytkownikLogin().equals(login) ) && (user.getUzytkownikAdresEmail().equals(adresEmail) && (user.isUzytkownikCzyZablokowany() == false)) ) {
                 istnieje = true;
             }
         }
