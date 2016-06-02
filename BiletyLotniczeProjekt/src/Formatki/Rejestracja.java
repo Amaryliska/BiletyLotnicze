@@ -7,8 +7,6 @@ import Beany.UzytkownikBean;
 import Narzedzia.Uzytkownicy;
 import java.awt.Color;
 import java.sql.SQLException;
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;

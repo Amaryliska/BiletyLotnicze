@@ -7,7 +7,6 @@ import Narzedzia.Wiadomosci;
 import Wzorce.SingletonUzytkownik;
 import java.awt.Color;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
