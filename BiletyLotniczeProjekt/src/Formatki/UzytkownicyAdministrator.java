@@ -1,6 +1,8 @@
 package Formatki;
 
+import Beany.UzytkownikBean;
 import Narzedzia.Uzytkownicy;
+import Wzorce.SingletonUzytkownik;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -35,11 +37,13 @@ public class UzytkownicyAdministrator extends javax.swing.JFrame {
     Uzytkownicy uzytkownicy;
     List<Object[]> listaWszystkichuzytkownikow;
     JFrame parentFrame;
+    UzytkownikBean uzytkownikBean;
     /**
      * Creates new form UzytkownicyAdministrator
      */
     public UzytkownicyAdministrator() throws SQLException {
         initComponents();
+        uzytkownikBean = SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik();
         uzytkownicy = new Uzytkownicy();
         zarzadzanie  = new ButtonGroup();
         listCheckBoxes = new ArrayList<>();
@@ -133,7 +137,6 @@ public class UzytkownicyAdministrator extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        setSize(new java.awt.Dimension(900, 600));
 
         buttonBlokuj.setText("Blokuj / Odblokuj");
         buttonBlokuj.addActionListener(new java.awt.event.ActionListener() {
@@ -190,12 +193,27 @@ public class UzytkownicyAdministrator extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Wiadomości");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Wyloguj");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Wyjście");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
@@ -355,6 +373,30 @@ public class UzytkownicyAdministrator extends javax.swing.JFrame {
              }
         }
     }//GEN-LAST:event_buttonZmianaHaslaActionPerformed
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        try {
+            // TODO add your handling code here:
+            if (uzytkownikBean.isUzytkownikCzyAdministrator()) {
+                new WiadomosciAdministrator().setVisible(true);
+            } else {
+                new WiadomosciUzytkownik().setVisible(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Konto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu3MouseClicked
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        new Logowanie().setVisible(true);
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        // TODO add your handling code here:
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu5MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

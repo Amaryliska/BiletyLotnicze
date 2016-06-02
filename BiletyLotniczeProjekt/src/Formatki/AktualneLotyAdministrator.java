@@ -1,9 +1,11 @@
 package Formatki;
 
 import Beany.RezerwacjaBean;
+import Beany.UzytkownikBean;
 import Narzedzia.Loty;
 import Narzedzia.Powiadomienia;
 import Narzedzia.Zakupy;
+import Wzorce.SingletonUzytkownik;
 import java.awt.Button;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -50,11 +52,13 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
     JFrame parentFrame;
     private DodanieLotu frameDodanieLotu = null;
     private EdycjaLotu frameEdycjaLotu = null;
+    UzytkownikBean uzytkownikBean;
     /**
      * Creates new form AktualneLotyAdministrator
      */
     public AktualneLotyAdministrator() {
         initComponents();
+        uzytkownikBean = SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik();
         loty = new Loty();
         zakupy = new Zakupy();
         powiadomienia = new Powiadomienia();
@@ -93,7 +97,6 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        setSize(new java.awt.Dimension(900, 600));
 
         listaWszystkichLotow.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -145,12 +148,27 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Wiadomości");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Wyloguj");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Wyjście");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
@@ -160,9 +178,9 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(buttonDodaj, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(buttonEdytuj, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -170,7 +188,6 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
                         .addComponent(buttonUsun, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(241, 241, 241))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
                 .addComponent(panelModyfikacji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -370,6 +387,30 @@ public class AktualneLotyAdministrator extends javax.swing.JFrame {
             Logger.getLogger(AktualneLotyAdministrator.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_buttonDodajActionPerformed
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        try {
+            // TODO add your handling code here:
+            if (uzytkownikBean.isUzytkownikCzyAdministrator()) {
+                new WiadomosciAdministrator().setVisible(true);
+            } else {
+                new WiadomosciUzytkownik().setVisible(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Konto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu3MouseClicked
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        new Logowanie().setVisible(true);
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        // TODO add your handling code here:
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu5MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

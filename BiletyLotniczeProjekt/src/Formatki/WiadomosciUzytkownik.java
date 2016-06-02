@@ -227,6 +227,11 @@ public class WiadomosciUzytkownik extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Wiadomości");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Wyloguj");
@@ -318,6 +323,20 @@ public class WiadomosciUzytkownik extends javax.swing.JFrame {
             infoL.setText("Nie zostały spełnione wszystkie warunki do wysłania wiadomosci.");
         }
     }//GEN-LAST:event_wyslijBActionPerformed
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        try {
+            // TODO add your handling code here:
+            if (uzytkownikBean.isUzytkownikCzyAdministrator()) {
+                new WiadomosciAdministrator().setVisible(true);
+            } else {
+                new WiadomosciUzytkownik().setVisible(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Konto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu3MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
