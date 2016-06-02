@@ -554,7 +554,14 @@ public class Konto extends javax.swing.JFrame {
 
     private void szukajMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_szukajMenuMouseClicked
         // TODO add your handling code here:
-        new AktualneLoty().setVisible(true);
+        if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+        {
+            new AktualneLotyAdministrator().setVisible(true);
+        }
+        else
+        {
+            new AktualneLoty().setVisible(true);
+        }
         parentFrame.dispose();
     }//GEN-LAST:event_szukajMenuMouseClicked
 

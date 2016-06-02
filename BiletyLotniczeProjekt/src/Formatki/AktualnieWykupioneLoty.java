@@ -3,6 +3,7 @@ package Formatki;
 import Beany.UzytkownikBean;
 import Wzorce.SingletonUzytkownik;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -75,9 +76,19 @@ public class AktualnieWykupioneLoty extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable1);
 
         jMenu1.setText("Szukaj");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Moje konto");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Wiadomości");
@@ -129,7 +140,7 @@ public class AktualnieWykupioneLoty extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+  
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
         try {
             // TODO add your handling code here:
@@ -153,6 +164,32 @@ public class AktualnieWykupioneLoty extends javax.swing.JFrame {
         // TODO add your handling code here:
         parentFrame.dispose();
     }//GEN-LAST:event_jMenu5MouseClicked
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        // TODO add your handling code here:
+        if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+        {
+            new AktualneLotyAdministrator().setVisible(true);
+        }
+        else
+        {
+            new AktualneLoty().setVisible(true);
+        }
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu1MouseClicked
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            new Konto().setVisible(true);
+        } catch (ParseException ex) {
+            Logger.getLogger(AktualneLoty.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(AktualneLoty.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu2MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

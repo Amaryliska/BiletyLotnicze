@@ -6,6 +6,7 @@
 package Narzedzia;
 
 import Beany.WiadomoscBean;
+import Wzorce.SingletonUzytkownik;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,7 +68,14 @@ public class Wiadomosci {
         try
         {
             ps = connection.prepareStatement( POBRANIE_WIADOMOSCI );
-            ps.setObject(1, idUzytkownika);
+            if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+            {
+                ps.setObject(1, 99);
+            }
+            else
+            {
+                ps.setObject(1, idUzytkownika);
+            }
             rs = ps.executeQuery();
             listaWiadomosciBean = narzedziaBazyDanych.ustawWiadomosci( rs );
             

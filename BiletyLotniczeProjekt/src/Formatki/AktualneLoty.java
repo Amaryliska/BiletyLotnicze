@@ -96,7 +96,7 @@ public class AktualneLoty extends javax.swing.JFrame {
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
         jLabel2 = new javax.swing.JLabel();
-        klasaComboBox = new javax.swing.JComboBox<String>();
+        klasaComboBox = new javax.swing.JComboBox<>();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
@@ -124,7 +124,7 @@ public class AktualneLoty extends javax.swing.JFrame {
 
         jLabel2.setText("Wyszukaj lot i zarezerwuj miejsce!");
 
-        klasaComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Wszystkie", "Ekonomiczna", "Ekonomiczna Premium", "Biznes", "Pierwsza" }));
+        klasaComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Wszystkie", "Ekonomiczna", "Ekonomiczna Premium", "Biznes", "Pierwsza" }));
 
         jCheckBox2.setText("Przylot");
 
@@ -185,6 +185,11 @@ public class AktualneLoty extends javax.swing.JFrame {
         });
 
         jMenu1.setText("Szukaj");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu1);
 
         mojeKonroMenu.setText("Moje konto");
@@ -529,6 +534,19 @@ public class AktualneLoty extends javax.swing.JFrame {
         new Logowanie().setVisible(true);
         parentFrame.dispose();
     }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        // TODO add your handling code here:if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+        if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+        {
+            new AktualneLotyAdministrator().setVisible(true);
+        }
+        else
+        {
+            new AktualneLoty().setVisible(true);
+        }
+        parentFrame.dispose();
+    }//GEN-LAST:event_jMenu1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
