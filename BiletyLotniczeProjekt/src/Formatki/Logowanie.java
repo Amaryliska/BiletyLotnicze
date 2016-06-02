@@ -4,7 +4,6 @@ import Beany.UzytkownikBean;
 import Narzedzia.Uzytkownicy;
 import java.awt.Color;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -165,12 +164,15 @@ public class Logowanie extends javax.swing.JFrame {
                 }
                 logowanie.dispose();
             }
-            loginTF.setCaretColor(Color.RED);
-            loginTF.setDisabledTextColor(Color.RED);
-            loginTF.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
-            hasloPF.setCaretColor(Color.RED);
-            hasloPF.setDisabledTextColor(Color.RED);
-            hasloPF.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
+            else
+            {
+                loginTF.setCaretColor(Color.RED);
+                loginTF.setDisabledTextColor(Color.RED);
+                loginTF.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
+                hasloPF.setCaretColor(Color.RED);
+                hasloPF.setDisabledTextColor(Color.RED);
+                hasloPF.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
         }
