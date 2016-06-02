@@ -500,14 +500,22 @@ public class AktualneLoty extends javax.swing.JFrame {
     }//GEN-LAST:event_wykonajPrzyciskActionPerformed
 
     private void mojeKonroMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mojeKonroMenuMouseClicked
-        try {
-            // TODO add your handling code here:
-            new Konto().setVisible(true);
-        } catch (ParseException ex) {
-            Logger.getLogger(AktualneLoty.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(AktualneLoty.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+                {
+            try {
+                new UzytkownicyAdministrator().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(AktualneLoty.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                }
+                else
+                {      
+                    try {
+                        new Konto().setVisible(true);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
         parentFrame.dispose();
     }//GEN-LAST:event_mojeKonroMenuMouseClicked
 

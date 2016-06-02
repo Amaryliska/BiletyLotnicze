@@ -2,6 +2,7 @@ package Formatki;
 
 import Beany.UzytkownikBean;
 import Narzedzia.Uzytkownicy;
+import Wzorce.SingletonUzytkownik;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.List;
@@ -157,10 +158,17 @@ public class Logowanie extends javax.swing.JFrame {
             // TODO add your handling code here:
             if(uzytkownicy.logowanie(loginTF.getText(), new String(hasloPF.getPassword())))
             {
-                try {
-                    new Konto().setVisible(true);
-                } catch (Exception ex) {
-                    Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
+                if( SingletonUzytkownik.pobierzInstancje().pobierzUzytkownik().isUzytkownikCzyAdministrator() )
+                {
+                    new UzytkownicyAdministrator().setVisible(true);
+                }
+                else
+                {      
+                    try {
+                        new Konto().setVisible(true);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Logowanie.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 logowanie.dispose();
             }
