@@ -6,6 +6,7 @@ import Beany.LotniskoBean;
 import Beany.LotBean;
 import Beany.RezerwacjaBean;
 import Beany.UzytkownikBean;
+import Beany.WiadomoscBean;
 import Beany.ZakupBean;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -162,6 +163,33 @@ public class NarzedziaBazyDanych
         return listaRezerwacjiBean;
     }
     
+    public List<WiadomoscBean> ustawWiadomosci ( ResultSet rs )
+    {
+        List<WiadomoscBean> listaWiadomosciBean = new ArrayList<WiadomoscBean>();
+        try
+        {
+            while( rs.next() )
+            {
+                WiadomoscBean wiadomoscBean = new WiadomoscBean();
+                
+                wiadomoscBean.setWiadomoscID(rs.getInt( 1 ) );
+                wiadomoscBean.setWiadomoscIDOdbiorcy(rs.getInt(2));
+                wiadomoscBean.setWiadomoscIDNadawcy(rs.getInt(3));
+                wiadomoscBean.setWiadomoscTemat(rs.getString(4));
+                wiadomoscBean.setWiadomoscTresc(rs.getString(5));
+                wiadomoscBean.setWiadomoscData(rs.getDate(6));
+                wiadomoscBean.setWiadomoscTyp(rs.getString(7));
+                
+                listaWiadomosciBean.add( wiadomoscBean );
+            }
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        return listaWiadomosciBean;
+    }
+    
     public List<UzytkownikBean> ustawUzytkownikow( ResultSet rs )
     {
         List<UzytkownikBean> listaUzytkownikowBean = new ArrayList<UzytkownikBean>();
@@ -172,16 +200,18 @@ public class NarzedziaBazyDanych
                 UzytkownikBean uzytkownikBean = new UzytkownikBean();
                 
                 uzytkownikBean.setUzytkownikID(rs.getInt( 1 ));
-                uzytkownikBean.setUzytkownikImie(rs.getString( 2 ));
-                uzytkownikBean.setUzytkownikNazwisko(rs.getString( 3 ));
-                uzytkownikBean.setUzytkownikPlec(rs.getString(4));
-                uzytkownikBean.setUzytkownikPESEL(rs.getString(5));
-                uzytkownikBean.setUzytkownikCzyAdministrator(rs.getBoolean(6));
-                uzytkownikBean.setUzytkownikCzyZablokowany(rs.getBoolean(7));
-                uzytkownikBean.setUzytkownikHaslo(rs.getString(8));
-                uzytkownikBean.setUzytkownikCzyZmianaHasla(rs.getBoolean(9));
-                uzytkownikBean.setUzytkownikSaldo(rs.getFloat(10));
-                uzytkownikBean.setUzytkownikData(rs.getDate(11));
+                uzytkownikBean.setUzytkownikLogin(rs.getString( 2 ));
+                uzytkownikBean.setUzytkownikImie(rs.getString( 3 ));
+                uzytkownikBean.setUzytkownikNazwisko(rs.getString( 4 ));
+                uzytkownikBean.setUzytkownikAdresEmail(rs.getString( 5 ));
+                uzytkownikBean.setUzytkownikPlec(rs.getString(6));
+                uzytkownikBean.setUzytkownikPESEL(rs.getString(7));
+                uzytkownikBean.setUzytkownikCzyAdministrator(rs.getBoolean(8));
+                uzytkownikBean.setUzytkownikCzyZablokowany(rs.getBoolean(9));
+                uzytkownikBean.setUzytkownikHaslo(rs.getString(10));
+                uzytkownikBean.setUzytkownikCzyZmianaHasla(rs.getBoolean(11));
+                uzytkownikBean.setUzytkownikSaldo(rs.getFloat(12));
+                uzytkownikBean.setUzytkownikData(rs.getDate(13));
                 
                 listaUzytkownikowBean.add( uzytkownikBean );
             }
